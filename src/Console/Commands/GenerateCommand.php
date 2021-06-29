@@ -79,10 +79,12 @@ class GenerateCommand extends Command
 
         $outputString = '';
         foreach ($reflection->getConstants() as $key => $value) {
-            if (gettype($value) == gettype(" ") ) {
+            if (gettype($value) == gettype(" ")) {
                 $outputString .= sprintf("export const %s = \"%s\"\n", $key, $value);
-            }
-            else {
+            } else if (is_array($value)) {
+                $toString = '[' . implode(',', $value) . ']';
+                $outputString .= sprintf("export const %s = %s\n", $key, $toString);
+            } else {
                 $outputString .= sprintf("export const %s = %s\n", $key, $value);
             }
         }
